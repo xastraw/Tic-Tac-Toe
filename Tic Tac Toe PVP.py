@@ -90,7 +90,7 @@ def main():
     print("\n")
     print("\t   Welcome to Tic-Tac-Toe!")
     printBoard()
-    print("\n\n\n")
+
 
     player = "X"
     gameOn = True
