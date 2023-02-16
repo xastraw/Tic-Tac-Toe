@@ -1,11 +1,11 @@
-
+'''
 board=[
     #0     1    2
     ['-', '-', '-'],    #0
     ['-', '-', '-'],    #1
     ['-', '-', '-']     #2
-]
-
+]'''
+board =[]
 
 def printBoard():
     print("\n")
@@ -21,15 +21,21 @@ def printBoard():
 
 def takeTurn(play):
 
-    col = int(input("Player " + play + ", please pick a col. "))
-    row = int(input("Player " + play + ", please pick a row. "))
-    row = row-1    #subtract 1 because python starts at 0
-    col = col-1
+
+    if play == "X":
+        col = int(input("Player " + play + ", please pick a col. "))
+        row = int(input("Player " + play + ", please pick a row. "))
+        row = row-1    #subtract 1 because python starts at 0
+        col = col-1
+        if isValidMove(row, col) == True:
+            placePlayer(play, row, col)
+        else:
+            takeTurn(play)
+
+    elif play == "O":
+        miniMax("O")
     
-    if isValidMove(row, col) == True:
-        placePlayer(play, row, col)
-    else:
-        takeTurn(play)
+    
 
 def isValidMove(r, c):
     
@@ -46,7 +52,6 @@ def isValidMove(r, c):
 
 def placePlayer(play,r,c):
     board[r][c] = play
-    printBoard()
 
 
 def checkColWin(play):
@@ -68,12 +73,17 @@ def checkDiagWin(play):
         return True
 
 def checkTie():
-    if '-' in board[0] or '-' in board[1] or '-' in board[2]:
+    if '-' in board[0] or '-' in board[1] or '-' in board[2]:       #if there are blank spaces in board it means it can't be tied yet
         return False
     else:
         return True
 
-def checkWin():
+def checkWin(player):
+
+    if (checkRowWin(player) or checkColWin(player) or checkDiagWin(player)):
+        return True
+
+    '''
     if (checkRowWin("X") or checkColWin("X") or checkDiagWin("X")) == True:
         print("\t\t     X Wins!")
         return True         #returning true so main function knows to end the game
@@ -83,26 +93,79 @@ def checkWin():
     elif(checkTie() == True):
         print("\t\t   It's a tie!")
         return True
+    '''
 
+
+def miniMax(player):
+    
+    optimalRow = -1 
+    optimalCol = -1
+    moves =[]
+    if checkWin("X") == True:           #dont want to happen so negative score returned
+        #print("results in X winning")
+        return (-10, None, None)              
+    elif checkWin("O") == True:         #want to happen so positive score
+        #print("results in O winning")
+        return (10, None, None)
+    elif checkTie() == True:            #draw so no score attributed
+        #print("results in a tie")
+        return (0, None, None)
+
+
+
+    if player == "O":
+        best = -1000
+        #for every avaible space place O, then run max function, then return board to original state
+        for row in range(3):
+            for col in range(3):
+                if board[row][col] == "-":
+                    placePlayer("O", row, col)
+                    print(row, col)
+                    bestScore = max(best, miniMax("X")[0])   
+                    #what this does is find the highest number between the value of best(-1000) and miniMax(could be legit -20 or 60) idea is that -1000 is so low it will never reach
+                    placePlayer("-", row, col)
+        optimalRow = row
+        optimalCol = col
+        return (bestScore, optimalRow, optimalCol)
+
+    if player == "X":
+        worst = 1000
+        for row in range(3):
+            for col in range(3):
+                if board[row][col] == "-":
+                    placePlayer("X", row, col)
+                    print(row, col)
+                    worstScore = min(worst, miniMax("O")[0])
+                    placePlayer("-", row, col)
+        optimalRow = row
+        optimalCol = col
+        return (worstScore, optimalCol, optimalRow)
 
 def main():
 
     print("\n")
     print("\t   Welcome to Tic-Tac-Toe!")
-    printBoard()
+    #printBoard()
     print("\n\n\n")
 
-    player = "X"
-    gameOn = True
-
-
+    player = "O"
+    gameOn = False
+        
+    board.append(["O","X","-"])
+    board.append(["-","X","-"])
+    board.append(["-","-","-"])
+    print("Calling minimax('O') on this board:")
+    printBoard()
+    print("Minimax should return (0, 2, 1):", miniMax("O"))
 
     while gameOn == True:
         print("Player " + player + "'s Turn")
         takeTurn(player)
         
 
-        if checkWin() == True:
+        if checkWin("X") == True:
+            gameOn = False
+        elif checkWin("Y") == True:
             gameOn = False
 
         if player == "X":
