@@ -6,8 +6,10 @@ board=[
     ['-', '-', '-']     #2
 ]
 
+
 player = "X"
 game_on = True
+
 
 def printBoard():
     print("\n")
@@ -94,6 +96,11 @@ def main():
     printBoard()
 
 
+    player = "X"
+    gameOn = True
+
+
+
     
     global game_on
     global player
@@ -104,7 +111,11 @@ def main():
         
 
         if checkWin() == True:
+
             game_on = False
+        else:
+            gameOn = False
+
 
         if player == "X":
             player = "O"
