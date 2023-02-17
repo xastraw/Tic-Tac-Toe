@@ -78,12 +78,10 @@ def checkTie():
     else:
         return True
 
-def checkWin(player):
+def checkWin():
 
-    if (checkRowWin(player) or checkColWin(player) or checkDiagWin(player)):
-        return True
 
-    '''
+    
     if (checkRowWin("X") or checkColWin("X") or checkDiagWin("X")) == True:
         print("\t\t     X Wins!")
         return True         #returning true so main function knows to end the game
@@ -93,23 +91,27 @@ def checkWin(player):
     elif(checkTie() == True):
         print("\t\t   It's a tie!")
         return True
-    '''
+    
+def checkAiWin(player):         #checks the win for AI so it doesnt print shit ton of stuff
+    if (checkRowWin(player) or checkColWin(player) or checkDiagWin(player)):
+        return True
 
 
 def miniMax(player):
     
     optimalRow = -1 
     optimalCol = -1
-    moves =[]
+
+
     if checkWin("X") == True:           #dont want to happen so negative score returned
         #print("results in X winning")
-        return (-10, None, None)              
+        return -10#(-10, None, None)              
     elif checkWin("O") == True:         #want to happen so positive score
         #print("results in O winning")
-        return (10, None, None)
+        return 10#(10, None, None)
     elif checkTie() == True:            #draw so no score attributed
         #print("results in a tie")
-        return (0, None, None)
+        return 0#(0, None, None)
 
 
 
@@ -120,13 +122,10 @@ def miniMax(player):
             for col in range(3):
                 if board[row][col] == "-":
                     placePlayer("O", row, col)
-                    print(row, col)
-                    bestScore = max(best, miniMax("X")[0])   
+                    bestScore = max(best, miniMax("X"))
                     #what this does is find the highest number between the value of best(-1000) and miniMax(could be legit -20 or 60) idea is that -1000 is so low it will never reach
                     placePlayer("-", row, col)
-        optimalRow = row
-        optimalCol = col
-        return (bestScore, optimalRow, optimalCol)
+        return bestScore
 
     if player == "X":
         worst = 1000
@@ -134,29 +133,27 @@ def miniMax(player):
             for col in range(3):
                 if board[row][col] == "-":
                     placePlayer("X", row, col)
-                    print(row, col)
-                    worstScore = min(worst, miniMax("O")[0])
+                    worstScore = min(worst, miniMax("O"))
                     placePlayer("-", row, col)
-        optimalRow = row
-        optimalCol = col
-        return (worstScore, optimalCol, optimalRow)
+        return worstScore
+
+
+
 
 def main():
 
     print("\n")
     print("\t   Welcome to Tic-Tac-Toe!")
     #printBoard()
-    print("\n\n\n")
 
     player = "O"
     gameOn = False
         
-    board.append(["O","X","-"])
-    board.append(["-","X","-"])
-    board.append(["-","-","-"])
-    print("Calling minimax('O') on this board:")
+    board.append(["O","X","X"])
+    board.append(["O","X","X"])
+    board.append(["-","O","-"])
     printBoard()
-    print("Minimax should return (0, 2, 1):", miniMax("O"))
+    print("Minimax should return (10, 2, 0) ", miniMax("O"))
 
     while gameOn == True:
         print("Player " + player + "'s Turn")
