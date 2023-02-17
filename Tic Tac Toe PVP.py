@@ -25,8 +25,8 @@ def printBoard():
 
 def takeTurn(play):
 
-    col = int(input("Player " + play + ", please pick a col. "))
-    row = int(input("Player " + play + ", please pick a row. "))
+    col = int(input("Player " + play + ", please pick a col: "))
+    row = int(input("Player " + play + ", please pick a row: "))
     row = row-1    #subtract 1 because python starts at 0
     col = col-1
     
