@@ -7,6 +7,10 @@ board=[
 ]
 
 
+player = "X"
+game_on = True
+
+
 def printBoard():
     print("\n")
     print("\t1\t\t2\t\t3\n")
@@ -92,18 +96,22 @@ def main():
     printBoard()
 
 
-    player = "X"
-    gameOn = True
 
+    
+    global game_on
+    global player
 
-
-    while gameOn == True:
+    while game_on == True:
         print("Player " + player + "'s Turn")
         takeTurn(player)
         
 
         if checkWin() == True:
+
+            game_on = False
+        else:
             gameOn = False
+
 
         if player == "X":
             player = "O"
