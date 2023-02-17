@@ -96,10 +96,6 @@ def main():
     printBoard()
 
 
-    player = "X"
-    gameOn = True
-
-
 
     
     global game_on
