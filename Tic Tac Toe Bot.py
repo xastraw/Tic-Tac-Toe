@@ -7,6 +7,12 @@ board=[
 ]'''
 board =[]
 
+
+player = "O"
+#should be X by default
+game_on = False
+#make true to have game go
+
 def printBoard():
     print("\n")
     print("\t1\t\t2\t\t3\n")
@@ -23,8 +29,8 @@ def takeTurn(play):
 
 
     if play == "X":
-        col = int(input("Player " + play + ", please pick a col. "))
-        row = int(input("Player " + play + ", please pick a row. "))
+        col = int(input("Player " + play + ", please pick a col: "))
+        row = int(input("Player " + play + ", please pick a row: "))
         row = row-1    #subtract 1 because python starts at 0
         col = col-1
         if isValidMove(row, col) == True:
@@ -80,7 +86,6 @@ def checkTie():
 
 def checkWin():
 
-
     
     if (checkRowWin("X") or checkColWin("X") or checkDiagWin("X")) == True:
         print("\t\t     X Wins!")
@@ -92,21 +97,21 @@ def checkWin():
         print("\t\t   It's a tie!")
         return True
     
-def checkAiWin(player):         #checks the win for AI so it doesnt print shit ton of stuff
+def check_AiWin(player):         #checks the win for AI so it doesnt print shit ton of stuff
     if (checkRowWin(player) or checkColWin(player) or checkDiagWin(player)):
         return True
 
 
-def miniMax(player):
+def mini(player):
     
     optimalRow = -1 
     optimalCol = -1
 
 
-    if checkWin("X") == True:           #dont want to happen so negative score returned
+    if check_AiWin(player) == True:           #dont want to happen so negative score returned
         #print("results in X winning")
         return -10#(-10, None, None)              
-    elif checkWin("O") == True:         #want to happen so positive score
+    elif check_AiWin(player) == True:         #want to happen so positive score
         #print("results in O winning")
         return 10#(10, None, None)
     elif checkTie() == True:            #draw so no score attributed
@@ -139,6 +144,60 @@ def miniMax(player):
 
 
 
+def compMove():
+    bestscore = -1000
+    bestrow = -1
+    bestcol = -1
+
+    for row in range(3):
+        for col in range(3):
+            if(board[row][col] == '-'):
+                board[row][col] = "O"
+                score = miniMax(False)
+                board[row][col] = "-"
+                if(score > bestscore):
+                    bestscore = score
+                    bestrow = row
+                    bestcol = col
+    
+    placePlayer("O", bestrow, bestcol)
+    return
+
+def miniMax(isMaximizing):
+    if check_AiWin(player) == True:           #dont want to happen so negative score returned
+        print("results in X winning")
+        return -10#(-10, None, None)              
+    elif check_AiWin(player) == True:         #want to happen so positive score
+        print("results in O winning")
+        return 10#(10, None, None)
+    elif checkTie() == True:            #draw so no score attributed
+        print("results in a tie")
+        return 0#(0, None, None)
+
+    if (isMaximizing):
+        bestScore = -800
+
+        for row in range(3):
+            for col in range(3):
+                if (board[row][col] == '-'):
+                    board[row][col] = "O"
+                    score = miniMax(False)
+                    board[row][col] = '-'
+                    if (score > bestScore):
+                        bestScore = score
+        return bestScore
+
+    else:
+        bestScore = 800
+        for row in range(3):
+            for col in range(3):
+                if (board[row][col] == "-"):
+                    board[row][col] = "X"
+                    score = miniMax(True)
+                    board[row][col] = '-'
+                    if (score < bestScore):
+                        bestScore = score
+        return bestScore
 
 def main():
 
@@ -146,24 +205,24 @@ def main():
     print("\t   Welcome to Tic-Tac-Toe!")
     #printBoard()
 
-    player = "O"
-    gameOn = False
+    global player
+    global game_on
         
     board.append(["O","X","X"])
     board.append(["O","X","X"])
     board.append(["-","O","-"])
     printBoard()
-    print("Minimax should return (10, 2, 0) ", miniMax("O"))
+    print("Minimax should return (10, 2, 0) ", compMove())
 
-    while gameOn == True:
+    while game_on == True:
         print("Player " + player + "'s Turn")
         takeTurn(player)
         
 
-        if checkWin("X") == True:
-            gameOn = False
-        elif checkWin("Y") == True:
-            gameOn = False
+        if checkWin() == True:
+            game_on = False
+        elif checkWin() == True:
+            game_on = False
 
         if player == "X":
             player = "O"
