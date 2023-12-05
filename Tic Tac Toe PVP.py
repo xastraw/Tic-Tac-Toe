@@ -25,8 +25,8 @@ def printBoard():
 
 def takeTurn(play):
 
-    col = int(input("Player " + play + ", please pick a col. "))
-    row = int(input("Player " + play + ", please pick a row. "))
+    col = int(input("Player " + play + ", please pick a col: "))
+    row = int(input("Player " + play + ", please pick a row: "))
     row = row-1    #subtract 1 because python starts at 0
     col = col-1
     
@@ -51,25 +51,7 @@ def isValidMove(r, c):
 def placePlayer(play,r,c):
     board[r][c] = play
     printBoard()
-
-
-def checkColWin(play):
-    for i in range(3):
-        if board[0][i] == play and board[1][i] == play and board[2][i] == play:
-            return True
     
-
-def checkRowWin(play):
-    for i in range(3):
-        if board[i][0] == play and board[i][1] == play and board[i][2] == play:
-            return True
-
-            
-def checkDiagWin(play):
-    if board[0][0] == play and board[1][1] == play and board[2][2] == play:
-        return True
-    if board[0][2] == play and board[1][1] == play and board[2][0] == play:
-        return True
 
 def checkTie():
     if '-' in board[0] or '-' in board[1] or '-' in board[2]:
@@ -77,15 +59,20 @@ def checkTie():
     else:
         return True
 
-def checkWin():
-    if (checkRowWin("X") or checkColWin("X") or checkDiagWin("X")) == True:
-        print("\t\t     X Wins!")
-        return True         #returning true so main function knows to end the game
-    elif (checkRowWin("O") or checkColWin("O") or checkDiagWin("O")) == True:
-        print("\t\t     O Wins!")
+def checkWin(play):
+    
+    #check col win
+    for i in range(3):
+        if board[0][i] == play and board[1][i] == play and board[2][i] == play:
+            return True
+    #check row win
+    for i in range(3):
+        if board[i][0] == play and board[i][1] == play and board[i][2] == play:
+            return True
+    #check diag win
+    if board[0][0] == play and board[1][1] == play and board[2][2] == play:
         return True
-    elif(checkTie() == True):
-        print("\t\t   It's a tie!")
+    if board[0][2] == play and board[1][1] == play and board[2][0] == play:
         return True
 
 
@@ -93,24 +80,24 @@ def main():
 
     print("\n")
     print("\t   Welcome to Tic-Tac-Toe!")
-    printBoard()
+ 
 
-
-
-    
     global game_on
     global player
 
     while game_on == True:
+        printBoard()
         print("Player " + player + "'s Turn")
         takeTurn(player)
         
 
-        if checkWin() == True:
-
+        if checkWin(player) == True:
+            printBoard()
+            print("Player ", player, " Wins!")
             game_on = False
-        else:
-            gameOn = False
+        elif checkTie() == True:
+            print("It's a tie!")
+            game_on = False
 
 
         if player == "X":
