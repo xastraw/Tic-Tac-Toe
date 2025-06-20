@@ -1,26 +1,17 @@
 
 class Board:
     def __init__(self):
-        #'''
         self.board = [
             ['-', '-', '-'],
             ['-', '-', '-'],
             ['-', '-', '-']
         ]
-        '''
-        self.board = [
-            ['X', 'O', 'X'],
-            ['O', '-', 'O'],
-            ['O', '-', '-']
-        ]
-        '''
         
     def print_board(self):
         print("\ta\tb\tc")
         row_labels = ['1', '2', '3']
         for idx, row in enumerate(self.board):
             print(f"{row_labels[idx]}\t" + "\t".join(row))
-        #print("\n")
 
     def getMove(self, player): 
         #gets the move from player and places the marker on gameboard
