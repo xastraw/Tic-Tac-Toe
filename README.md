@@ -1,1 +1,1 @@
-A small tic tac toe side project I made. Has a player versus player function and a player versus AI that uses the minimax algorithm.
+A small tic tac toe side project I made. Has a player versus player function and a player versus AI that uses the minimax algorithm. gamePVP is the file for playing against someone else, gameAI is for the bot.
