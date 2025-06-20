@@ -1,1 +1,1 @@
-A fun side project I started but ran out of time to finish. The PvP works but the workings for the mini-max algorithm I was unable to finish
+A small tic tac toe side project I made. Has a player versus player function and a player versus AI that uses the minimax algorithm.
